@@ -11,8 +11,6 @@ func main(){
 	var remoteAddr, localAddr string;
 
 	flag.StringVar(&remoteAddr, "rAddr", "INVALID ADDRESS", "remoteAdress")
-	flag.Parse()
-
 	flag.StringVar(&localAddr, "lAddr", "", "localAddress")
 	flag.Parse()
 
