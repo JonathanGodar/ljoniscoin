@@ -12,7 +12,7 @@ func main(){
 }
 
 func StartServer(){
-	addr, err := net.ResolveTCPAddr("tcp", "192.168.1.83:3001")
+	addr, err := net.ResolveTCPAddr("tcp", "192.168.1.83:8923")
 	DieIf(err)
 
 	ln, err  := net.ListenTCP("tcp", addr)
