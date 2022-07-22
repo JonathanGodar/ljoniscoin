@@ -4,16 +4,20 @@ import (
 	"flag"
 	"fmt"
 	"net"
+	"time"
 )
 
 func main(){
-	var remoteAddr string;
+	var remoteAddr, localAddr string;
 
-	flag.StringVar(&remoteAddr, "rAddr", "remoteAddress", "remoteAdress")
+	flag.StringVar(&remoteAddr, "rAddr", "INVALID ADDRESS", "remoteAdress")
+	flag.Parse()
+
+	flag.StringVar(&localAddr, "lAddr", "", "localAddress")
 	flag.Parse()
 
 
-	laddr, err := net.ResolveTCPAddr("tcp", ":")
+	laddr, err := net.ResolveTCPAddr("tcp", localAddr)
 	DieIf(err)
 
 	raddr, err := net.ResolveTCPAddr("tcp",remoteAddr)
@@ -21,12 +25,31 @@ func main(){
 
 
 	fmt.Println("Connecting")
-	conn, err := net.DialTCP("tcp", laddr, raddr);
+
+	var conn *net.TCPConn
+
+	lastAttemptAt := time.Now()
+
+	minDiff := 200 * time.Millisecond;
+	for attemptsRemaining := 50; attemptsRemaining >= 0; attemptsRemaining-- {
+		conn, err = net.DialTCP("tcp", laddr, raddr);
+		if err == nil {
+			break
+		}
+
+		diff :=  time.Now().Sub(lastAttemptAt)
+		fmt.Printf("Attempts remaining: %v\n", attemptsRemaining)
+		if diff < minDiff {
+			time.Sleep(minDiff - diff)
+		}
+		lastAttemptAt = time.Now()
+	}
 	DieIf(err)
+
 	defer conn.Close()
 	fmt.Println("Connected")
-
 	fmt.Println("Wrinting message")
+
 	conn.Write([]byte("hello world"))
 }
 
