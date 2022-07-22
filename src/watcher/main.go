@@ -12,7 +12,7 @@ func main(){
 }
 
 func StartServer(){
-	addr, err := net.ResolveTCPAddr("tcp", ":8932")
+	addr, err := net.ResolveTCPAddr("tcp", "192.168.1.83:3001")
 	DieIf(err)
 
 	ln, err  := net.ListenTCP("tcp", addr)
@@ -37,7 +37,7 @@ func StartServer(){
 func HandleConnection(conn *net.TCPConn){
 	fmt.Printf("Recieved a connection from %v\n", conn.RemoteAddr())
 	io.Copy(os.Stdout, conn)
-	fmt.Printf("Connection %v closed\n", conn.RemoteAddr())
+	fmt.Printf("\nConnection %v closed\n", conn.RemoteAddr())
 }
 
 

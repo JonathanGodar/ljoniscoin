@@ -9,14 +9,14 @@ import (
 func main(){
 	var remoteAddr string;
 
-	flag.StringVar(&remoteAddr, "rAddr", "remoteAddress", "remoteAdress" )
+	flag.StringVar(&remoteAddr, "rAddr", "remoteAddress", "remoteAdress")
 	flag.Parse()
 
 
 	laddr, err := net.ResolveTCPAddr("tcp", ":")
 	DieIf(err)
 
-	raddr, err := net.ResolveTCPAddr("tcp", ":8932")
+	raddr, err := net.ResolveTCPAddr("tcp",remoteAddr)
 	DieIf(err)
 
 
